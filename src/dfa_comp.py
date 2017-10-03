@@ -6,11 +6,13 @@ format following dfa_simp
 from dfa_simp import minimize, print_dfa
 
 
-def apply_config(config, dfa):
+def apply_config(config, s, f, dfa):
     ndfa = dict()
+    nf = list(map(lambda n: config[n], f))
+    ns = config[s]
     for k in dfa:
         ndfa[config[k]] = list(map(lambda n: config[n], dfa[k]))
-    return ndfa
+    return ns, nf, ndfa
 
 
 def exact_dfa_comp(dfa1: {int: [int]}, dfa2: {int: [int]}):
@@ -22,16 +24,23 @@ def exact_dfa_comp(dfa1: {int: [int]}, dfa2: {int: [int]}):
     return True
 
 
-def dfa_comp(dfa1: {int: [int]}, dfa2: {int: [int]}) -> bool:
+def dfa_comp(s1, f1, dfa1: {int: [int]}, s2, f2, dfa2: {int: [int]}):
     from itertools import permutations
     for cfg in permutations(dfa2.keys()):
-        dfa = apply_config(cfg, dfa2)
-        if exact_dfa_comp(dfa1, dfa):
-            return True
-    return False
+        s, f, dfa = apply_config(cfg, s2, f2, dfa2)
+        if exact_dfa_comp(dfa1, dfa) and s == s1 and f == f1:
+            return True, (s, f, dfa)
+    return False, None
 
 
 if __name__ == '__main__':
-    dfa1 = minimize('input1.txt')
-    dfa2 = minimize('input2.txt')
-    print(dfa_comp(dfa1, dfa2))
+    s1, f1, dfa1 = minimize('input1.txt')
+    s2, f2, dfa2 = minimize('input2.txt')
+    same, dfa = dfa_comp(s1, f1, dfa1, s2, f2, dfa2)
+    if same:
+        s, f, d = dfa
+        print(s, end=', ')
+        for fs in f:
+            print(fs, sep=', ')
+        print_dfa(d)
+    print(same)

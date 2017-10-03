@@ -63,9 +63,9 @@ def split_states(states: set, groups: [set], trans: dict):
 
 def print_dfa(dfa):
     for k in dfa.keys():
-        print(k, end=' ')
+        print(k, end=', ')
         for j in dfa[k]:
-            print(j, end=' ')
+            print(j, end=', ')
         print()
     pass
 
@@ -97,18 +97,22 @@ def dfa_mini(start: int, final, trans: dict):
 
     result = dict()
     result2 = dict()
+    new_start = None
+    new_final = []
     for i in range(len(groups)):
         if start in groups[i]:
             print('start state', i)
+            new_start = i
         if list(groups[i])[0] in final:
             print('final state', i)
+            new_final.append(i)
         result[i] = list(map(lambda s: groups.index(find_group(s, groups)), trans[list(groups[i])[0]]))
         result2[i] = list(map(lambda s: find_group(s, groups), trans[list(groups[i])[0]]))
 
     # print_dfa(result)
     # for k in result2:
     #     print(groups[k], '\t\t', result2[k])
-    return result
+    return new_start, new_final, result
 
 
 def minimize(input_file: str):
