@@ -121,5 +121,6 @@ def minimize(input_file: str):
 
 
 if __name__ == '__main__':
-    result = minimize('input.txt')
+    s, f, result = minimize('input.txt')
+    print(s, f)
     print_dfa(result)

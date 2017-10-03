@@ -28,7 +28,8 @@ def dfa_comp(s1, f1, dfa1: {int: [int]}, s2, f2, dfa2: {int: [int]}):
     from itertools import permutations
     for cfg in permutations(dfa2.keys()):
         s, f, dfa = apply_config(cfg, s2, f2, dfa2)
-        if exact_dfa_comp(dfa1, dfa) and s == s1 and f == f1:
+        # if exact_dfa_comp(dfa1, dfa) and s == s1 and set(f) == set(f1):
+        if exact_dfa_comp(dfa1, dfa):
             return True, (s, f, dfa)
     return False, None
 
@@ -36,11 +37,14 @@ def dfa_comp(s1, f1, dfa1: {int: [int]}, s2, f2, dfa2: {int: [int]}):
 if __name__ == '__main__':
     s1, f1, dfa1 = minimize('input1.txt')
     s2, f2, dfa2 = minimize('input2.txt')
-    same, dfa = dfa_comp(s1, f1, dfa1, s2, f2, dfa2)
-    if same:
-        s, f, d = dfa
+    s3, f3, dfa3 = minimize('input3.txt')
+    same1, ndfa1 = dfa_comp(s1, f1, dfa1, s3, f3, dfa3)
+    same2, ndfa2 = dfa_comp(s2, f2, dfa2, s3, f3, dfa3)
+    if same1 or same2:
+        print(True)
+    else:
+        print(False)
+        s, f, d = s3, f3, dfa3
         print(s, end=', ')
-        for fs in f:
-            print(fs, sep=', ')
+        print(f)
         print_dfa(d)
-    print(same)
