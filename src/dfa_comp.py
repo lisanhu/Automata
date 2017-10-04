@@ -34,17 +34,4 @@ def dfa_comp(s1, f1, dfa1: {int: [int]}, s2, f2, dfa2: {int: [int]}):
     return False, None
 
 
-if __name__ == '__main__':
-    s1, f1, dfa1 = minimize('input1.txt')
-    s2, f2, dfa2 = minimize('input2.txt')
-    s3, f3, dfa3 = minimize('input3.txt')
-    same1, ndfa1 = dfa_comp(s1, f1, dfa1, s3, f3, dfa3)
-    same2, ndfa2 = dfa_comp(s2, f2, dfa2, s3, f3, dfa3)
-    if same1 or same2:
-        print(True)
-    else:
-        print(False)
-        s, f, d = s3, f3, dfa3
-        print(s, end=', ')
-        print(f)
-        print_dfa(d)
+
